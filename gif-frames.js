@@ -58,7 +58,8 @@ function gifFrames (options, callback) {
 
   // Necessary to check if we're in Node or the browser until this is fixed:
   // https://github.com/scijs/get-pixels/issues/33
-  var inputType = typeof window === 'undefined' ? 'image/gif' : '.GIF';
+  // var inputType = typeof window === 'undefined' ? 'image/gif' : '.GIF';
+  var inputType = 'image/gif';
   getPixels(url, inputType, function (err, pixels, framesInfo) {
     if (err) {
       reject(err);
@@ -77,7 +78,7 @@ function gifFrames (options, callback) {
       (function (frameIndex) {
         frameData.push({
           getImage: function () {
-            if (cumulative && frameIndex > maxAccumulatedFrame) {
+            if (cumulative && frameIndex > maxAccumulatedFrame && framesInfo[frameIndex].disposal !== 2) {
               // for each frame, replace any invisible pixel with
               // the corresponding pixel from the previous frame (beginning
               // with the second frame).
